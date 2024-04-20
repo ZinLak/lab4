@@ -101,23 +101,25 @@ def main():
     plt.figure(figsize=(18, 4))
 
     plt.subplot(1, 4, 1)
-    plt.imshow(F, cmap='viridis')
-    plt.title('Матрица F')
-    plt.colorbar()
+    plt.hist(F.flatten(), bins=20, color='skyblue', edgecolor='black')
+    plt.title('Гистограмма матрицы F')
 
     plt.subplot(1, 4, 2)
-    plt.imshow(np.tril(F), cmap='coolwarm')
-    plt.title('Нижний треугольник матрицы F')
-    plt.colorbar()
+    labels = ['B', 'C', 'D', 'E']
+    sizes = [np.sum(submatrix[key]) for key in labels]
+    # Проверяем, что сумма элементов не равна нулю, чтобы избежать деления на ноль
+    sizes = [max(0, s) + 0.01 for s in sizes]
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.title('Круговая диаграмма подматриц')
 
     plt.subplot(1, 4, 3)
-    plt.imshow(np.triu(F), cmap='RdYlBu')
-    plt.title('Верхний треугольник матрицы F')
-    plt.colorbar()
+    plt.plot(np.diag(F), marker='o', color='green')
+    plt.title('Линейный график главной диагонали F')
 
     plt.subplot(1, 4, 4)
-    plt.plot(np.diag(F))
-    plt.title('График главной диагонали матрицы F')
+    plt.bar(np.arange(len(sizes)), sizes, color='orange')
+    plt.xticks(np.arange(len(labels)), labels)
+    plt.title('Гистограмма суммы элементов подматриц')
 
     plt.tight_layout()
     plt.show()
